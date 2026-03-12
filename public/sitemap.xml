@@ -7,33 +7,27 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://gardenlayouttips.vercel.app/about</loc>
+    <loc>https://gardenlayouttips.vercel.app/about/</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://gardenlayouttips.vercel.app/blog</loc>
+    <loc>https://gardenlayouttips.vercel.app/blog/</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://gardenlayouttips.vercel.app/guides</loc>
+    <loc>https://gardenlayouttips.vercel.app/guides/</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://gardenlayouttips.vercel.app/planner</loc>
+    <loc>https://gardenlayouttips.vercel.app/planner/</loc>
     <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://gardenlayouttips.vercel.app/contact</loc>
-    <lastmod>2026-03-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
 </urlset>
