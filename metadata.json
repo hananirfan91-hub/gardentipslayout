@@ -1,0 +1,7 @@
+{
+  "name": "GardenLayoutTips - Expert Vegetable Garden Planner",
+  "description": "Design your perfect vegetable garden with our interactive layout planner. Expert tips on companion planting, raised beds, and small space gardening. Start growing today!",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

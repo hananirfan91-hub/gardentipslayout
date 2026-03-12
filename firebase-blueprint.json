@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Information about the registered user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "GardenLayout": {
+      "title": "Garden Layout",
+      "description": "A saved vegetable garden layout design.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "width": { "type": "number" },
+              "height": { "type": "number" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "items"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "A user's favorite article or guide.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "contentId": { "type": "string" },
+        "contentType": { "type": "string", "enum": ["article", "guide"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "contentId", "contentType"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles."
+    },
+    "/layouts/{layoutId}": {
+      "schema": "GardenLayout",
+      "description": "Saved garden layouts."
+    },
+    "/favorites/{favoriteId}": {
+      "schema": "Favorite",
+      "description": "User favorites."
+    }
+  }
+}
