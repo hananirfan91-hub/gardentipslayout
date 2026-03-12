@@ -88,10 +88,10 @@ export const About: React.FC = () => {
           </p>
           <div className="flex gap-4">
             {[
-              { icon: Youtube, color: 'hover:text-red-600' , url: 'https://www.youtube.com/@ancientmystery-0'},
-              { icon: Facebook, color: 'hover:text-blue-600',url: 'https://facebook.com/HananIrfan001' },
-              { icon: Instagram, color: 'hover:text-pink-600',url: 'https://instagram.com/tearswithhanan/' },
-              { icon: Twitter, color: 'hover:text-sky-500',url: 'https://x.com/hananirfan91/' },
+              { icon: Youtube, color: 'hover:text-red-600' },
+              { icon: Facebook, color: 'hover:text-blue-600' },
+              { icon: Instagram, color: 'hover:text-pink-600' },
+              { icon: Twitter, color: 'hover:text-sky-500' },
             ].map((social, i) => (
               <a key={i} href="#" className={`text-stone-400 transition-colors ${social.color}`}>
                 <social.icon size={24} />
