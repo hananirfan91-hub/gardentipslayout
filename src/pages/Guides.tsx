@@ -169,7 +169,7 @@ export const Guides: React.FC = () => {
                 {guide.desc}
               </p>
               <button className="text-emerald-700 font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
-                Start Guide <ChevronRight size={16} />
+              <a href="https://growgive.extension.colostate.edu/wp-content/uploads/sites/63/2021/01/Colorado-Vegetable-Guide-2.1.pdf">Start Guide </a> <ChevronRight size={16} />
               </button>
             </div>
           </motion.div>
