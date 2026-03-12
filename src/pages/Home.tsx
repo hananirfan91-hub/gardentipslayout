@@ -160,7 +160,7 @@ export const Home: React.FC = () => {
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="p-4 bg-stone-800">
-                  <p className="text-sm font-bold text-emerald-400"><a href="https://gardenlayouttips.vercel.app/blog/vegetable-garden-layout-ideas">Layout Mastery</a></p>
+                  <p className="text-sm font-bold text-emerald-400">Layout Mastery</p>
                 </div>
               </div>
               <div className="rounded-2xl overflow-hidden shadow-lg border border-stone-800 group">
@@ -170,7 +170,7 @@ export const Home: React.FC = () => {
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="p-4 bg-stone-800">
-                  <p className="text-sm font-bold text-emerald-400"><a href="https://gardenlayouttips.vercel.app/blog/small-backyard-layout">Companion Secrets</a></p>
+                  <p className="text-sm font-bold text-emerald-400">Companion Secrets</p>
                 </div>
               </div>
             </div>
