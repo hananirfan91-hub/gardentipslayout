@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
-import { Sprout, Menu, X, User, LogOut } from 'lucide-react';
+import { Sprout, Menu, X, User, LogOut, Youtube, Facebook, Instagram, Twitter, MapPin, Phone } from 'lucide-react';
 import { Chatbot } from './Chatbot';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -27,6 +27,27 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f5f0] text-stone-900 font-sans">
+      {/* Floating Social Sidebar */}
+      <div className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden xl:flex flex-col gap-4">
+        {[
+          { icon: Youtube, color: 'bg-red-600', url: 'https://www.youtube.com/@ancientmystery-0' },
+          { icon: Facebook, color: 'bg-blue-600', url: 'https://facebook.com/HananIrfan001' },
+          { icon: Instagram, color: 'bg-pink-600', url: 'https://instagram.com/tearswithhanan/' },
+          { icon: Twitter, color: 'bg-sky-500', url: 'https://x.com/hananirfan91' },
+        ].map((social, i) => (
+          <motion.a
+            key={i}
+            href={social.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.1, x: 5 }}
+            className={`${social.color} text-white p-3 rounded-xl shadow-lg hover:shadow-xl transition-all`}
+          >
+            <social.icon size={20} />
+          </motion.a>
+        ))}
+      </div>
+
       {/* Navigation */}
       <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -159,6 +180,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <p className="text-sm leading-relaxed">
               Empowering gardeners to design productive and beautiful vegetable patches with ease.
             </p>
+            <div className="pt-4 space-y-2 text-sm">
+              <p className="flex items-center gap-2"><MapPin size={14} className="text-emerald-500" /> 123 Garden Lane, RYK, PK</p>
+              <p className="flex items-center gap-2"><Phone size={14} className="text-emerald-500" /> +92 310 6359 235</p>
+            </div>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
@@ -195,7 +220,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-stone-800 text-center text-xs">
-          <p>© 2026 Vegetable Garden Layout Ideas. All rights reserved.</p>
+          <p>© 2026 GardenLayoutTips. All rights reserved.</p>
         </div>
       </footer>
 

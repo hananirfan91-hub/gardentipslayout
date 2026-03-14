@@ -99,6 +99,36 @@ export const VEGETABLES = [
       "Harvest: Wait until the vines die back for the best storage quality."
     ]
   },
+  { 
+    type: 'Peas', 
+    color: '#32cd32', 
+    icon: '🫛',
+    tips: [
+      "Support: Provide a trellis or netting for climbing varieties to grow on.",
+      "Cool Weather: Plant as soon as the soil can be worked in early spring.",
+      "Harvest: Pick frequently to encourage the plant to keep producing."
+    ]
+  },
+  { 
+    type: 'Radish', 
+    color: '#e32636', 
+    icon: '🥗',
+    tips: [
+      "Fast Growing: Great for interplanting between slower-growing crops.",
+      "Thinning: Thin to 1-2 inches apart for well-shaped roots.",
+      "Watering: Consistent moisture prevents woody or overly spicy radishes."
+    ]
+  },
+  { 
+    type: 'Spinach', 
+    color: '#2e8b57', 
+    icon: '🍃',
+    tips: [
+      "Bolting: Plant in early spring or fall; it bolts quickly in summer heat.",
+      "Soil: Prefers nitrogen-rich soil for lush leaf production.",
+      "Harvest: Pick individual leaves or cut the whole plant for a larger harvest."
+    ]
+  },
 ];
 
 export const BLOG_POSTS = [
@@ -334,5 +364,62 @@ Plant a "guild" of mutually beneficial plants around a central fruit tree to cre
     alt: 'Thriving permaculture vegetable garden layout with a diverse and self-sustaining ecosystem of plant species',
     category: 'Layout Ideas',
     date: '2026-03-05'
+  },
+  {
+    id: '9',
+    title: 'How to Optimize Sunlight in Your Garden Layout',
+    slug: 'optimize-sunlight-layout',
+    excerpt: 'Sunlight is the engine of your garden. Learn how to map your yard and place plants for maximum growth.',
+    content: `
+# How to Optimize Sunlight in Your Garden Layout
+
+Sunlight is the single most important factor in the success of your vegetable garden. Most vegetables need at least 6 to 8 hours of direct sun daily to thrive.
+
+## Mapping Your Sunlight
+
+Before you build your first bed, spend a day observing your yard. Note which areas get full sun, partial shade, and full shade. Remember that the sun's path changes with the seasons.
+
+## Placing Your Plants
+
+### Full Sun (6-8+ hours)
+Tomatoes, peppers, cucumbers, and corn need the most light. Place these in the sunniest spots.
+
+### Partial Sun/Shade (4-6 hours)
+Leafy greens like lettuce, spinach, and kale can tolerate less sun and may actually benefit from some afternoon shade in hot climates.
+
+### North-South Orientation
+Generally, orienting your rows or beds north to south ensures that plants get even sunlight throughout the day without shading each other out.
+    `,
+    image: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=75&w=1200&h=800',
+    alt: 'Sun-drenched vegetable garden layout showing optimal plant placement for maximum light exposure',
+    category: 'Beginners',
+    date: '2026-03-04'
+  },
+  {
+    id: '10',
+    title: 'Vertical Gardening Hacks for Small Layouts',
+    slug: 'vertical-gardening-hacks',
+    excerpt: 'Don\'t let a small footprint stop you. Use these vertical gardening hacks to double your growing space.',
+    content: `
+# Vertical Gardening Hacks for Small Layouts
+
+Vertical gardening is the ultimate solution for small backyard layouts. By growing up instead of out, you can dramatically increase your harvest.
+
+## 1. Cattle Panel Trellises
+These sturdy, inexpensive panels can be arched between two raised beds to create a "garden tunnel" for climbing crops like squash and beans.
+
+## 2. Hanging Gutters
+Mount old gutters on a sunny wall or fence to grow shallow-rooted crops like lettuce, strawberries, and herbs.
+
+## 3. Pallet Planters
+Upcycle heat-treated pallets into vertical herb gardens. Just be sure to check for the "HT" stamp to ensure they are safe for food crops.
+
+## 4. Tower Gardens
+Use vertical towers or stacked pots to grow a massive amount of greens in a footprint of just a few square feet.
+    `,
+    image: 'https://images.unsplash.com/photo-1592419044706-39796d40f98c?auto=format&fit=crop&q=75&w=1200&h=800',
+    alt: 'Creative vertical gardening layout using trellises and wall-mounted planters in a small space',
+    category: 'Small Spaces',
+    date: '2026-03-03'
   }
 ];

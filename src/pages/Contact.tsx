@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send, MessageSquare, Loader2, CheckCircle2 } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -45,6 +46,49 @@ export const Contact: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <Helmet>
+        <title>Contact Us | GardenLayoutTips</title>
+        <meta name="description" content="Get in touch with GardenLayoutTips for expert advice on your vegetable garden layout. We're here to help you grow." />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "GardenLayoutTips",
+              "image": "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=1200&h=630",
+              "@id": "https://gardenlayouttips.vercel.app/contact",
+              "url": "https://gardenlayouttips.vercel.app/contact",
+              "telephone": "+92 310 6359 235",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "123 Garden Lane",
+                "addressLocality": "Rahim Yar Khan",
+                "addressRegion": "Punjab",
+                "postalCode": "64200",
+                "addressCountry": "PK"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 28.4211634,
+                "longitude": 70.2316499
+              },
+              "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday"
+                ],
+                "opens": "09:00",
+                "closes": "17:00"
+              }
+            }
+          `}
+        </script>
+      </Helmet>
+
       <div className="text-center max-w-3xl mx-auto mb-20">
         <h1 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6">Get in Touch</h1>
         <p className="text-lg text-stone-600">
@@ -59,7 +103,7 @@ export const Contact: React.FC = () => {
             {[
               { icon: Mail, label: 'Email Us', value: 'hananirfan91@gmail.com' },
               { icon: Phone, label: 'Call Us', value: '+92 310 6359 235' },
-              { icon: MapPin, label: 'Visit Us', value: 'View on Google Maps' },
+              { icon: MapPin, label: 'Visit Us', value: '123 Garden Lane, RYK, PK' },
               { icon: MessageSquare, label: 'Live Chat', value: 'Available 9am - 5pm' },
             ].map((item, i) => (
               <div key={i} className="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">

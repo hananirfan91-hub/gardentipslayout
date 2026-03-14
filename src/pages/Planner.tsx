@@ -8,6 +8,7 @@ import { GardenItem, GardenLayout } from '../types';
 import { Save, Trash2, Plus, Download, Layout as LayoutIcon, Loader2, CheckCircle, Info, X, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -209,85 +210,6 @@ export const Planner: React.FC = () => {
     }
   };
 
-  const handleExport = async () => {
-    if (!canvasRef.current) return;
-    
-    setIsLoading(true);
-    try {
-      const canvas = await html2canvas(canvasRef.current, {
-        scale: 2,
-        backgroundColor: '#fdfdfb',
-        logging: false,
-        useCORS: true
-      });
-      
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      
-      // Header with Logo
-      pdf.setFillColor(90, 90, 64); // #5A5A40
-      pdf.rect(0, 0, 210, 30, 'F');
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(20);
-      pdf.text('GardenLayoutTips', 15, 20);
-      
-      // Layout Title
-      pdf.setTextColor(30, 30, 30);
-      pdf.setFontSize(24);
-      pdf.text(layoutName, 15, 45);
-      
-      // Date
-      pdf.setFontSize(10);
-      pdf.setTextColor(150, 150, 150);
-      pdf.text(`Generated on ${new Date().toLocaleDateString()}`, 15, 52);
-      
-      // Garden Image
-      const imgWidth = pageWidth - 30;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 15, 60, imgWidth, imgHeight);
-      
-      // Tips Section
-      if (tipsHistory.length > 0) {
-        pdf.addPage();
-        pdf.setFillColor(90, 90, 64);
-        pdf.rect(0, 0, 210, 20, 'F');
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(16);
-        pdf.text('Expert Gardening Tips for Your Layout', 15, 13);
-        
-        pdf.setTextColor(60, 60, 60);
-        pdf.setFontSize(11);
-        let y = 35;
-        tipsHistory.forEach((tip, index) => {
-          if (y > 270) {
-            pdf.addPage();
-            y = 20;
-          }
-          const splitTip = pdf.splitTextToSize(`${index + 1}. ${tip}`, pageWidth - 30);
-          pdf.text(splitTip, 15, y);
-          y += (splitTip.length * 7) + 5;
-        });
-      }
-      
-      // Footer
-      const pageCount = pdf.internal.pages.length - 1;
-      for (let i = 1; i <= pageCount; i++) {
-        pdf.setPage(i);
-        pdf.setFontSize(8);
-        pdf.setTextColor(180, 180, 180);
-        pdf.text(`Page ${i} of ${pageCount} | gardenlayouttips.vercel.app`, pageWidth / 2, 285, { align: 'center' });
-      }
-      
-      pdf.save(`${layoutName.replace(/\s+/g, '_')}_Plan.pdf`);
-    } catch (error) {
-      console.error('Error exporting PDF:', error);
-      alert('Failed to export PDF. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   if (!user) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-4 text-center">
@@ -305,6 +227,11 @@ export const Planner: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Helmet>
+        <title>Garden Planner | GardenLayoutTips</title>
+        <meta name="description" content="Design your perfect vegetable garden layout with our interactive planner. Drag and drop plants, save your designs, and grow more food." />
+        <link rel="canonical" href="https://gardenlayouttips.vercel.app/planner" />
+      </Helmet>
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar - Tools */}
         <aside className="w-full lg:w-80 space-y-8">
@@ -394,12 +321,6 @@ export const Planner: React.FC = () => {
                 {saveStatus === 'saving' ? <Loader2 size={18} className="animate-spin" /> : 
                  saveStatus === 'success' ? <CheckCircle size={18} /> : <Save size={18} />}
                 {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : 'Save Layout'}
-              </button>
-              <button
-                onClick={handleExport}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm bg-stone-100 text-stone-700 hover:bg-stone-200 transition-all"
-              >
-                <Download size={18} /> Export PDF
               </button>
             </div>
           </div>

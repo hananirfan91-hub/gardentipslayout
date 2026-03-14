@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Download, Play, ChevronRight, CheckCircle2, X } from 'lucide-react';
+import { BookOpen, Download, Play, ChevronRight, CheckCircle2, X, ExternalLink } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { BLOG_POSTS } from '../constants';
 
 export const Guides: React.FC = () => {
   const [showVideo, setShowVideo] = useState(false);
@@ -79,26 +82,34 @@ export const Guides: React.FC = () => {
       desc: 'Everything you need to know to start your first vegetable patch.',
       image: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=600&h=400',
       duration: '15 min read',
-      level: 'Beginner'
+      level: 'Beginner',
+      slug: 'vegetable-garden-layout-ideas'
     },
     {
       title: 'Small Space Mastery',
       desc: 'Advanced vertical gardening and container layout techniques.',
       image: 'https://images.unsplash.com/photo-1592419044706-39796d40f98c?auto=format&fit=crop&q=80&w=600&h=400',
       duration: '20 min read',
-      level: 'Intermediate'
+      level: 'Intermediate',
+      slug: 'small-backyard-layout'
     },
     {
       title: 'Raised Bed Revolution',
       desc: 'Design and build the perfect raised bed system for your backyard.',
       image: 'https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?auto=format&fit=crop&q=80&w=600&h=400',
       duration: '25 min read',
-      level: 'Advanced'
+      level: 'Advanced',
+      slug: 'raised-bed-gardening-guide'
     }
   ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <Helmet>
+        <title>Gardening Guides | GardenLayoutTips</title>
+        <meta name="description" content="Explore our comprehensive gardening guides to master your vegetable garden layout, soil health, and pest control." />
+        <link rel="canonical" href="https://gardenlayouttips.vercel.app/guides" />
+      </Helmet>
       <div className="text-center max-w-3xl mx-auto mb-20">
         <h1 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6">Interactive Gardening Guides</h1>
         <p className="text-lg text-stone-600">
@@ -148,33 +159,56 @@ export const Guides: React.FC = () => {
           <motion.div
             key={i}
             whileHover={{ y: -10 }}
-            onClick={() => alert(`Starting guide: ${guide.title}`)}
-            className="bg-white rounded-3xl overflow-hidden shadow-sm border border-stone-100 group cursor-pointer"
+            className="bg-white rounded-3xl overflow-hidden shadow-sm border border-stone-100 group"
           >
-            <div className="aspect-video overflow-hidden relative">
-              <img src={guide.image} alt={guide.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-emerald-800">
-                {guide.level}
+            <Link to={`/blog/${guide.slug}`}>
+              <div className="aspect-video overflow-hidden relative">
+                <img src={guide.image} alt={guide.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-emerald-800">
+                  {guide.level}
+                </div>
               </div>
-            </div>
-            <div className="p-8">
-              <div className="flex items-center gap-2 text-stone-400 text-xs mb-4">
-                <BookOpen size={14} />
-                <span>{guide.duration}</span>
+              <div className="p-8">
+                <div className="flex items-center gap-2 text-stone-400 text-xs mb-4">
+                  <BookOpen size={14} />
+                  <span>{guide.duration}</span>
+                </div>
+                <h3 className="text-xl font-bold text-stone-900 mb-4 group-hover:text-emerald-800 transition-colors">
+                  {guide.title}
+                </h3>
+                <p className="text-stone-600 text-sm mb-6 leading-relaxed">
+                  {guide.desc}
+                </p>
+                <div className="text-emerald-700 font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Start Guide <ChevronRight size={16} />
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-stone-900 mb-4 group-hover:text-emerald-800 transition-colors">
-                {guide.title}
-              </h3>
-              <p className="text-stone-600 text-sm mb-6 leading-relaxed">
-                {guide.desc}
-              </p>
-              <button className="text-emerald-700 font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
-              <a href="https://growgive.extension.colostate.edu/wp-content/uploads/sites/63/2021/01/Colorado-Vegetable-Guide-2.1.pdf">Start Guide </a> <ChevronRight size={16} />
-              </button>
-            </div>
+            </Link>
           </motion.div>
         ))}
       </div>
+
+      {/* Related Blog Posts */}
+      <section className="mt-24">
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-3xl font-bold text-stone-900">Related Expert Articles</h2>
+          <Link to="/blog" className="text-emerald-700 font-bold flex items-center gap-2 hover:gap-3 transition-all">
+            View All <ChevronRight size={20} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {BLOG_POSTS.slice(3, 6).map((post) => (
+            <Link key={post.id} to={`/blog/${post.slug}`} className="group bg-white p-6 rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition-all">
+              <div className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-3">{post.category}</div>
+              <h3 className="font-bold text-stone-900 mb-4 group-hover:text-emerald-700 transition-colors">{post.title}</h3>
+              <div className="flex items-center gap-2 text-stone-400 text-xs">
+                <ExternalLink size={14} />
+                <span>Read Article</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* Checklist Section */}
       <section className="mt-24 bg-stone-50 rounded-[3rem] p-12 md:p-20">

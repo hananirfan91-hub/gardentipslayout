@@ -1,10 +1,16 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Youtube, Facebook, Instagram, Twitter, Award, Heart, ShieldCheck } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 export const About: React.FC = () => {
   return (
     <div className="pb-24">
+      <Helmet>
+        <title>About Us | GardenLayoutTips</title>
+        <meta name="description" content="Learn about GardenLayoutTips and our mission to help you create the perfect vegetable garden layout. Founded by Hanan Irfan." />
+        <link rel="canonical" href="https://gardenlayouttips.vercel.app/about" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center overflow-hidden bg-stone-900">
         <div className="absolute inset-0 z-0">
@@ -88,12 +94,12 @@ export const About: React.FC = () => {
           </p>
           <div className="flex gap-4">
             {[
-              { icon: Youtube, color: 'hover:text-red-600' },
-              { icon: Facebook, color: 'hover:text-blue-600' },
-              { icon: Instagram, color: 'hover:text-pink-600' },
-              { icon: Twitter, color: 'hover:text-sky-500' },
+              { icon: Youtube, color: 'hover:text-red-600', url: 'https://www.youtube.com/@ancientmystery-0' },
+              { icon: Facebook, color: 'hover:text-blue-600', url: 'https://facebook.com/HananIrfan001' },
+              { icon: Instagram, color: 'hover:text-pink-600', url: 'https://instagram.com/tearswithhanan/' },
+              { icon: Twitter, color: 'hover:text-sky-500', url: 'https://x.com/hananirfan91' },
             ].map((social, i) => (
-              <a key={i} href="#" className={`text-stone-400 transition-colors ${social.color}`}>
+              <a key={i} href={social.url} target="_blank" rel="noopener noreferrer" className={`text-stone-400 transition-colors ${social.color}`}>
                 <social.icon size={24} />
               </a>
             ))}

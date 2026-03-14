@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BLOG_POSTS } from '../constants';
 import ReactMarkdown from 'react-markdown';
 import { motion } from 'motion/react';
-import { Calendar, User, ArrowLeft, Share2, Bookmark, Twitter, Facebook, Linkedin, Link as LinkIcon } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Share2, Bookmark, Twitter, Facebook, Linkedin, Link as LinkIcon, CheckCircle } from 'lucide-react';
+import { useAuth } from '../AuthContext';
+import { db } from '../firebase';
+import { doc, getDoc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
 
 export const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { user } = useAuth();
   const post = BLOG_POSTS.find(p => p.slug === slug);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [copyStatus, setCopyStatus] = useState(false);
+
+  useEffect(() => {
+    if (!user || !post) return;
+
+    const favRef = doc(db, 'users', user.uid, 'favorites', post.id);
+    const unsub = onSnapshot(favRef, (doc) => {
+      setIsFavorite(doc.exists());
+    });
+
+    return () => unsub();
+  }, [user, post]);
 
   if (!post) return <Navigate to="/blog" />;
 
@@ -29,7 +46,28 @@ export const BlogPost: React.FC = () => {
 
   const copyLink = () => {
     navigator.clipboard.writeText(shareUrl);
-    alert('Link copied to clipboard!');
+    setCopyStatus(true);
+    setTimeout(() => setCopyStatus(false), 2000);
+  };
+
+  const toggleFavorite = async () => {
+    if (!user) {
+      alert('Please sign in to save favorites!');
+      return;
+    }
+
+    const favRef = doc(db, 'users', user.uid, 'favorites', post.id);
+    if (isFavorite) {
+      await deleteDoc(favRef);
+    } else {
+      await setDoc(favRef, {
+        postId: post.id,
+        title: post.title,
+        slug: post.slug,
+        image: post.image,
+        savedAt: new Date().toISOString()
+      });
+    }
   };
 
   return (
@@ -37,6 +75,7 @@ export const BlogPost: React.FC = () => {
       <Helmet>
         <title>{post.title} | GardenLayoutTips</title>
         <meta name="description" content={post.excerpt} />
+        <link rel="canonical" href={`https://gardenlayouttips.vercel.app/blog/${post.slug}`} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:image" content={post.image} />
@@ -77,9 +116,17 @@ export const BlogPost: React.FC = () => {
                 <button onClick={shareOnTwitter} className="text-stone-400 hover:text-sky-500 transition-colors" title="Share on Twitter"><Twitter size={18} /></button>
                 <button onClick={shareOnFacebook} className="text-stone-400 hover:text-blue-600 transition-colors" title="Share on Facebook"><Facebook size={18} /></button>
                 <button onClick={shareOnLinkedIn} className="text-stone-400 hover:text-blue-700 transition-colors" title="Share on LinkedIn"><Linkedin size={18} /></button>
-                <button onClick={copyLink} className="text-stone-400 hover:text-emerald-700 transition-colors" title="Copy Link"><LinkIcon size={18} /></button>
+                <button onClick={copyLink} className={`${copyStatus ? 'text-emerald-600' : 'text-stone-400'} hover:text-emerald-700 transition-colors`} title="Copy Link">
+                  {copyStatus ? <CheckCircle size={18} /> : <LinkIcon size={18} />}
+                </button>
               </div>
-              <button className="text-stone-400 hover:text-emerald-700 transition-colors" title="Save for later"><Bookmark size={20} /></button>
+              <button 
+                onClick={toggleFavorite}
+                className={`${isFavorite ? 'text-emerald-600' : 'text-stone-400'} hover:text-emerald-700 transition-colors`} 
+                title={isFavorite ? "Remove from favorites" : "Save for later"}
+              >
+                <Bookmark size={20} fill={isFavorite ? "currentColor" : "none"} />
+              </button>
             </div>
           </div>
         </div>

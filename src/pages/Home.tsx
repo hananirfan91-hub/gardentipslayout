@@ -136,6 +136,35 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Community Stats */}
+      <section className="py-20 bg-emerald-900 text-white overflow-hidden relative">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-emerald-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-600 rounded-full blur-3xl"></div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { label: 'Happy Gardeners', value: '10,000+' },
+              { label: 'Layouts Created', value: '25,000+' },
+              { label: 'Plants Database', value: '500+' },
+              { label: 'Expert Guides', value: '100+' },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="text-4xl md:text-5xl font-bold mb-2 text-emerald-400">{stat.value}</div>
+                <div className="text-sm uppercase tracking-widest text-emerald-200 font-medium">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* YouTube Ad Section */}
       <section className="bg-stone-900 py-24 overflow-hidden relative">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
@@ -153,26 +182,26 @@ export const Home: React.FC = () => {
               for maximum yield and beauty. Our short guides are perfect for busy gardeners.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-              <div className="rounded-2xl overflow-hidden shadow-lg border border-stone-800 group">
+              <Link to="/blog/optimize-sunlight-layout" className="rounded-2xl overflow-hidden shadow-lg border border-stone-800 group block">
                 <img 
                   src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=600" 
                   alt="Garden Layout Tip 1" 
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="p-4 bg-stone-800">
-                  <p className="text-sm font-bold text-emerald-400">Layout Mastery</p>
+                  <p className="text-sm font-bold text-emerald-400">Sunlight Optimization</p>
                 </div>
-              </div>
-              <div className="rounded-2xl overflow-hidden shadow-lg border border-stone-800 group">
+              </Link>
+              <Link to="/blog/vertical-gardening-hacks" className="rounded-2xl overflow-hidden shadow-lg border border-stone-800 group block">
                 <img 
                   src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=600" 
                   alt="Garden Layout Tip 2" 
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="p-4 bg-stone-800">
-                  <p className="text-sm font-bold text-emerald-400">Companion Secrets</p>
+                  <p className="text-sm font-bold text-emerald-400">Vertical Hacks</p>
                 </div>
-              </div>
+              </Link>
             </div>
             <ul className="space-y-4">
               {[
@@ -197,6 +226,48 @@ export const Home: React.FC = () => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Detailed Content Section for SEO */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 border-t border-stone-200">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div className="prose prose-stone lg:prose-lg">
+            <h2 className="text-3xl font-bold text-stone-900 mb-6">The Science of a Productive Vegetable Garden Layout</h2>
+            <p>
+              Creating a successful <strong>vegetable garden layout</strong> is more than just placing seeds in the dirt. It's a delicate balance of biology, geometry, and timing. At GardenLayoutTips, we believe that every square inch of your garden should work toward a common goal: maximum health and maximum yield.
+            </p>
+            <p>
+              One of the most critical factors in your layout is sunlight. Most vegetables require at least 6 to 8 hours of direct sun. When designing your garden, you must account for the path of the sun throughout the day and the shadows cast by taller plants like corn or trellised tomatoes. Our interactive planner helps you visualize these placements to ensure no plant is left in the dark.
+            </p>
+            <h3 className="text-2xl font-bold text-stone-900 mt-10 mb-4">Why Planning Your Garden Layout Matters</h3>
+            <p>
+              Without a plan, gardens often become overcrowded, leading to poor air circulation and the rapid spread of pests and diseases. A well-thought-out <strong>garden layout</strong> allows for proper spacing, which is essential for root development and nutrient absorption.
+            </p>
+            <ul>
+              <li><strong>Companion Planting:</strong> Placing mutually beneficial plants together to deter pests and improve flavor.</li>
+              <li><strong>Crop Rotation:</strong> Planning your layout across seasons to prevent soil depletion and break pest cycles.</li>
+              <li><strong>Vertical Gardening:</strong> Utilizing trellises and towers to grow more in smaller footprints.</li>
+            </ul>
+          </div>
+          <div className="prose prose-stone lg:prose-lg">
+            <h2 className="text-3xl font-bold text-stone-900 mb-6">Maximizing Small Spaces with Smart Design</h2>
+            <p>
+              Not everyone has an acre of land to work with. In fact, some of the most productive gardens we've seen are small backyard patches or even balcony container gardens. The key is <strong>space optimization</strong>. By using intensive planting methods and high-quality soil mixes, you can produce a surprising amount of food in a tiny area.
+            </p>
+            <p>
+              Our guides cover everything from the "Square Foot Gardening" method to permaculture-inspired "Garden Mandalas." We provide the tools and the knowledge to help you turn any space into a thriving ecosystem. Whether you are building your first raised bed or managing a complex multi-season plot, our expert tips are here to guide you.
+            </p>
+            <p>
+              Soil health is the other half of the equation. A great layout won't save a garden with dead soil. We emphasize organic practices, composting, and minimal tillage to keep your soil biology thriving. Healthy soil leads to healthy plants, which in turn leads to a more resilient and productive garden layout.
+            </p>
+            <div className="mt-8 p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
+              <h4 className="text-emerald-900 font-bold mb-2">Expert Tip:</h4>
+              <p className="text-emerald-800 text-sm m-0">
+                Always place your "heavy feeders" like broccoli and leafy greens in areas where you've recently added fresh compost. Use your layout to track these high-nutrient zones!
+              </p>
+            </div>
           </div>
         </div>
       </section>
