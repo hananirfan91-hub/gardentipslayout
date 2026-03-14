@@ -3,17 +3,42 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
-import { Sprout, Menu, X, User, LogOut, Youtube, Facebook, Instagram, Twitter, MapPin, Phone } from 'lucide-react';
+import { Sprout, Menu, X, User, LogOut, Youtube, Facebook, Instagram, Twitter, MapPin, Phone, CheckCircle, Loader2 } from 'lucide-react';
 import { Chatbot } from './Chatbot';
 import { motion, AnimatePresence } from 'motion/react';
+import { db, handleFirestoreError, OperationType } from '../firebase';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, profile } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [newsletterEmail, setNewsletterEmail] = React.useState('');
+  const [subscribeStatus, setSubscribeStatus] = React.useState<'idle' | 'loading' | 'success'>('idle');
   const location = useLocation();
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail || subscribeStatus === 'loading') return;
+
+    setSubscribeStatus('loading');
+    try {
+      const email = newsletterEmail.toLowerCase().trim();
+      await setDoc(doc(db, 'newsletter_subscribers', email), {
+        email,
+        subscribedAt: serverTimestamp(),
+      });
+      setSubscribeStatus('success');
+      setNewsletterEmail('');
+      setTimeout(() => setSubscribeStatus('idle'), 3000);
+    } catch (error) {
+      handleFirestoreError(error, OperationType.WRITE, 'newsletter_subscribers');
+    } finally {
+      setSubscribeStatus('idle');
+    }
   };
 
   const navLinks = [
@@ -207,16 +232,28 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div>
             <h4 className="text-white font-semibold mb-4">Newsletter</h4>
             <p className="text-sm mb-4">Get gardening tips delivered to your inbox.</p>
-            <form className="flex gap-2">
+            <form onSubmit={handleSubscribe} className="flex gap-2">
               <input
                 type="email"
+                required
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
                 placeholder="Email address"
-                className="bg-stone-800 border-none rounded-lg px-4 py-2 text-sm flex-1 focus:ring-2 focus:ring-emerald-500 outline-none"
+                className="bg-stone-800 border-none rounded-lg px-4 py-2 text-sm flex-1 focus:ring-2 focus:ring-emerald-500 outline-none disabled:opacity-50"
+                disabled={subscribeStatus === 'loading' || subscribeStatus === 'success'}
               />
-              <button className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
-                Join
+              <button 
+                type="submit"
+                disabled={subscribeStatus === 'loading' || subscribeStatus === 'success'}
+                className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+              >
+                {subscribeStatus === 'loading' ? <Loader2 size={16} className="animate-spin" /> : 
+                 subscribeStatus === 'success' ? <CheckCircle size={16} /> : 'Join'}
               </button>
             </form>
+            {subscribeStatus === 'success' && (
+              <p className="text-emerald-500 text-xs mt-2 animate-pulse">Thanks for joining!</p>
+            )}
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-stone-800 text-center text-xs">

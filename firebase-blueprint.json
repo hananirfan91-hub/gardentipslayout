@@ -1,12 +1,12 @@
 {
   "entities": {
-    "UserProfile": {
-      "title": "User Profile",
-      "description": "Information about the registered user.",
+    "User": {
+      "title": "User",
+      "description": "User profile information",
       "type": "object",
       "properties": {
-        "uid": { "type": "string" },
-        "email": { "type": "string" },
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
         "displayName": { "type": "string" },
         "photoURL": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
@@ -15,55 +15,43 @@
     },
     "GardenLayout": {
       "title": "Garden Layout",
-      "description": "A saved vegetable garden layout design.",
+      "description": "A saved garden layout design",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
         "userId": { "type": "string" },
         "name": { "type": "string" },
-        "items": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "type": { "type": "string" },
-              "x": { "type": "number" },
-              "y": { "type": "number" },
-              "width": { "type": "number" },
-              "height": { "type": "number" }
-            }
-          }
-        },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "items": { "type": "array", "items": { "type": "object" } },
         "createdAt": { "type": "string", "format": "date-time" },
         "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["userId", "name", "items"]
     },
-    "Favorite": {
-      "title": "Favorite",
-      "description": "A user's favorite article or guide.",
+    "NewsletterSubscriber": {
+      "title": "Newsletter Subscriber",
+      "description": "User subscribed to the newsletter",
       "type": "object",
       "properties": {
-        "userId": { "type": "string" },
-        "contentId": { "type": "string" },
-        "contentType": { "type": "string", "enum": ["article", "guide"] },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "email": { "type": "string", "format": "email" },
+        "subscribedAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["userId", "contentId", "contentType"]
+      "required": ["email"]
     }
   },
   "firestore": {
     "/users/{userId}": {
-      "schema": "UserProfile",
-      "description": "User profiles."
+      "schema": "User",
+      "description": "User profiles"
     },
     "/layouts/{layoutId}": {
       "schema": "GardenLayout",
-      "description": "Saved garden layouts."
+      "description": "Saved garden layouts"
     },
-    "/favorites/{favoriteId}": {
-      "schema": "Favorite",
-      "description": "User favorites."
+    "/newsletter_subscribers/{email}": {
+      "schema": "NewsletterSubscriber",
+      "description": "Newsletter subscriptions"
     }
   }
 }

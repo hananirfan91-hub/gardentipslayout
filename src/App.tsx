@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './AuthContext';
 import { Layout } from './components/Layout';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Blog } from './pages/Blog';
@@ -21,19 +22,21 @@ export default function App() {
     <HelmetProvider>
       <AuthProvider>
         <Router>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/guides" element={<Guides />} />
-              <Route path="/planner" element={<Planner />} />
-              <Route path="/planner/:id" element={<Planner />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </Layout>
+          <ErrorBoundary>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/guides" element={<Guides />} />
+                <Route path="/planner" element={<Planner />} />
+                <Route path="/planner/:id" element={<Planner />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </Layout>
+          </ErrorBoundary>
         </Router>
       </AuthProvider>
     </HelmetProvider>

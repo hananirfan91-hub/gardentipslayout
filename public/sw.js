@@ -21,9 +21,18 @@ self.addEventListener('fetch', (event) => {
        event.request.headers.get('accept') && 
        event.request.headers.get('accept').includes('text/html'))) {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match(event.request);
-      })
+      fetch(event.request)
+        .then((response) => {
+          // If the network request returns a 404, fallback to index.html for SPA routing
+          if (response.status === 404) {
+            return caches.match('/index.html');
+          }
+          return response;
+        })
+        .catch(() => {
+          // If network fails entirely, fallback to index.html
+          return caches.match('/index.html');
+        })
     );
     return;
   }

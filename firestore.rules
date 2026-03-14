@@ -6,37 +6,37 @@ service cloud.firestore {
     // ===============================================================
     //
     // Collection: users
-    // Document ID: userId (uid)
+    // Document ID: {userId}
     // Fields:
     //   - uid: string (required)
     //   - email: string (required)
-    //   - displayName: string (optional)
-    //   - photoURL: string (optional)
-    //   - createdAt: timestamp (required)
+    //   - displayName: string
+    //   - photoURL: string
+    //   - createdAt: timestamp
     //
     // Collection: layouts
-    // Document ID: layoutId
+    // Document ID: {layoutId}
     // Fields:
+    //   - id: string
     //   - userId: string (required)
-    //   - name: string (required, max 100 chars)
-    //   - items: list (required, max 100 items)
-    //   - createdAt: timestamp (required)
-    //   - updatedAt: timestamp (required)
+    //   - name: string (required)
+    //   - width: number
+    //   - height: number
+    //   - items: list (required)
+    //   - createdAt: timestamp
+    //   - updatedAt: timestamp
     //
-    // Collection: favorites
-    // Document ID: favoriteId (userId + contentId)
+    // Collection: newsletter_subscribers
+    // Document ID: {email}
     // Fields:
-    //   - userId: string (required)
-    //   - contentId: string (required)
-    //   - contentType: string (required, enum: ['article', 'guide'])
-    //   - createdAt: timestamp (required)
+    //   - email: string (required)
+    //   - subscribedAt: timestamp
     //
     // ===============================================================
 
     // ===============================================================
     // Helper Functions
     // ===============================================================
-    
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -45,36 +45,35 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    function isDocOwner() {
-      return isAuthenticated() && request.auth.uid == resource.data.userId;
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "hananirfan91@gmail.com" && request.auth.token.email_verified == true));
     }
 
     function isValidEmail(email) {
       return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
     }
 
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
     function isValidUser(data) {
-      return data.keys().hasAll(['uid', 'email', 'createdAt']) &&
-             data.uid == request.auth.uid &&
-             isValidEmail(data.email) &&
-             data.createdAt is timestamp;
+      return data.keys().hasAll(['uid', 'email']) &&
+             data.uid is string && data.uid.size() > 0 &&
+             data.email is string && isValidEmail(data.email);
     }
 
     function isValidLayout(data) {
-      return data.keys().hasAll(['userId', 'name', 'items', 'createdAt', 'updatedAt']) &&
-             data.userId == request.auth.uid &&
-             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
-             data.items is list && data.items.size() <= 100 &&
-             data.createdAt is timestamp &&
-             data.updatedAt is timestamp;
+      return data.keys().hasAll(['userId', 'name', 'items']) &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.items is list && data.items.size() < 500;
     }
 
-    function isValidFavorite(data) {
-      return data.keys().hasAll(['userId', 'contentId', 'contentType', 'createdAt']) &&
-             data.userId == request.auth.uid &&
-             data.contentId is string && data.contentId.size() > 0 &&
-             data.contentType in ['article', 'guide'] &&
-             data.createdAt is timestamp;
+    function isValidNewsletterSubscriber(data) {
+      return data.keys().hasAll(['email']) &&
+             data.email is string && isValidEmail(data.email);
     }
 
     // ===============================================================
@@ -82,25 +81,21 @@ service cloud.firestore {
     // ===============================================================
 
     match /users/{userId} {
-      allow read: if isOwner(userId);
+      allow read: if isOwner(userId) || isAdmin();
       allow create: if isOwner(userId) && isValidUser(request.resource.data);
-      allow update: if isOwner(userId) && isValidUser(request.resource.data) && 
-                      request.resource.data.createdAt == resource.data.createdAt;
+      allow update: if isOwner(userId) && isValidUser(request.resource.data) && request.resource.data.uid == resource.data.uid;
     }
 
     match /layouts/{layoutId} {
-      allow read: if isDocOwner();
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isAuthenticated() && isValidLayout(request.resource.data);
-      allow update: if isDocOwner() && isValidLayout(request.resource.data) &&
-                      request.resource.data.userId == resource.data.userId &&
-                      request.resource.data.createdAt == resource.data.createdAt;
-      allow delete: if isDocOwner();
+      allow update: if isAuthenticated() && resource.data.userId == request.auth.uid && isValidLayout(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
     }
 
-    match /favorites/{favoriteId} {
-      allow read: if isDocOwner();
-      allow create: if isAuthenticated() && isValidFavorite(request.resource.data);
-      allow delete: if isDocOwner();
+    match /newsletter_subscribers/{email} {
+      allow read: if isAdmin();
+      allow create: if isValidNewsletterSubscriber(request.resource.data);
     }
   }
 }

@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 export const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,24 +11,12 @@ export const Chatbot: React.FC = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const chatRef = useRef<any>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
-
-  const initChat = () => {
-    if (!chatRef.current) {
-      chatRef.current = ai.chats.create({
-        model: "gemini-3-flash-preview",
-        config: {
-          systemInstruction: "You are a world-class gardening expert specializing in vegetable garden layouts. Your goal is to help users design productive, beautiful, and sustainable gardens. Provide specific advice on companion planting, crop rotation, spacing, and seasonal planning. Be encouraging, concise, and professional. If a user asks about specific plants, give them 'Gardener Expert' level tips. Always mention that they can use our interactive Planner to visualize their ideas.",
-        }
-      });
-    }
-  };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -41,13 +27,46 @@ export const Chatbot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      initChat();
-      const response = await chatRef.current.sendMessage({ message: userMessage });
-      const aiText = response.text || "I'm sorry, I couldn't process that. Could you try again?";
-      setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error('GEMINI_API_KEY is not defined');
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
+      const chat = ai.chats.create({
+        model: "gemini-3-flash-preview",
+        config: {
+          systemInstruction: "You are a world-class gardening expert specializing in vegetable garden layouts. Your goal is to help users design productive, beautiful, and sustainable gardens. Provide specific advice on companion planting, crop rotation, spacing, and seasonal planning. Be encouraging, concise, and professional. If a user asks about specific plants, give them 'Gardener Expert' level tips. Always mention that they can use our interactive Planner to visualize their ideas.",
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
+        },
+        // Pass history to maintain context
+        history: messages.map(m => ({
+          role: m.role === 'user' ? 'user' : 'model',
+          parts: [{ text: m.text }]
+        }))
+      });
+
+      setMessages(prev => [...prev, { role: 'ai', text: '' }]);
+      
+      const result = await chat.sendMessageStream({ message: userMessage });
+      let fullText = '';
+      
+      for await (const chunk of result) {
+        const chunkText = chunk.text;
+        fullText += chunkText;
+        setMessages(prev => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1] = { role: 'ai', text: fullText };
+          return newMessages;
+        });
+      }
     } catch (error) {
       console.error('Chatbot error:', error);
-      setMessages(prev => [...prev, { role: 'ai', text: "Sorry, I'm having trouble connecting right now. Please try again later." }]);
+      setMessages(prev => {
+        // Remove the empty AI message if it was added
+        const filtered = prev.filter(m => m.text !== '' || m.role !== 'ai');
+        return [...filtered, { role: 'ai', text: "Sorry, I'm having trouble connecting right now. Please ensure your API key is configured correctly." }];
+      });
     } finally {
       setIsLoading(false);
     }

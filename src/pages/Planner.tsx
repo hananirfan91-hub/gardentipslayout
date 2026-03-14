@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { useAuth } from '../AuthContext';
-import { db } from '../firebase';
+import { db, handleFirestoreError, OperationType } from '../firebase';
 import { collection, addDoc, query, where, getDocs, serverTimestamp, deleteDoc, doc, updateDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { VEGETABLES } from '../constants';
 import { GardenItem, GardenLayout } from '../types';
@@ -69,6 +69,8 @@ export const Planner: React.FC = () => {
           setLayoutName(data.name);
         }
       }
+    }, (error) => {
+      handleFirestoreError(error, OperationType.GET, `layouts/${currentLayoutId}`);
     });
 
     return () => unsub();
@@ -89,7 +91,7 @@ export const Planner: React.FC = () => {
       const layouts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as GardenLayout));
       setSavedLayouts(layouts);
     } catch (error) {
-      console.error('Error fetching layouts:', error);
+      handleFirestoreError(error, OperationType.LIST, 'layouts');
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +118,7 @@ export const Planner: React.FC = () => {
           updatedAt: serverTimestamp(),
         });
       } catch (error) {
-        console.error('Error adding item to shared layout:', error);
+        handleFirestoreError(error, OperationType.UPDATE, `layouts/${currentLayoutId}`);
       }
     }
   };
@@ -132,7 +134,7 @@ export const Planner: React.FC = () => {
           updatedAt: serverTimestamp(),
         });
       } catch (error) {
-        console.error('Error removing item from shared layout:', error);
+        handleFirestoreError(error, OperationType.UPDATE, `layouts/${currentLayoutId}`);
       }
     }
   };
@@ -146,7 +148,7 @@ export const Planner: React.FC = () => {
         items: newItems,
         updatedAt: serverTimestamp(),
       }).catch(error => {
-        console.error('Error updating item position in shared layout:', error);
+        handleFirestoreError(error, OperationType.UPDATE, `layouts/${currentLayoutId}`);
       });
     }
   };
@@ -177,7 +179,7 @@ export const Planner: React.FC = () => {
       setTimeout(() => setSaveStatus('idle'), 2000);
       fetchLayouts();
     } catch (error) {
-      console.error('Error saving layout:', error);
+      handleFirestoreError(error, OperationType.WRITE, 'layouts');
       setSaveStatus('idle');
     }
   };
@@ -206,7 +208,7 @@ export const Planner: React.FC = () => {
       await deleteDoc(doc(db, 'layouts', id));
       setSavedLayouts(savedLayouts.filter(l => l.id !== id));
     } catch (error) {
-      console.error('Error deleting layout:', error);
+      handleFirestoreError(error, OperationType.DELETE, `layouts/${id}`);
     }
   };
 
