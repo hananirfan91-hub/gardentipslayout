@@ -1,0 +1,20 @@
+# GardenLayoutTips
+
+Expert vegetable garden planning tools and guides.
+
+## Core Content
+- [Home](https://gardenlayouttips.vercel.app/) - Main landing page with featured articles and garden knowledge base.
+- [About](https://gardenlayouttips.vercel.app/about) - Our mission to empower gardeners.
+- [Blog](https://gardenlayouttips.vercel.app/blog) - Comprehensive guides on vegetable garden layouts.
+- [Guides](https://gardenlayouttips.vercel.app/guides) - Expert planting and layout guides.
+- [Planner](https://gardenlayouttips.vercel.app/planner) - Interactive garden layout planner tool.
+- [Contact](https://gardenlayouttips.vercel.app/contact) - Get in touch with our team.
+
+## Key Topics
+- Vegetable Garden Layout Ideas
+- Small Backyard Layouts
+- Raised Bed Gardening
+- Companion Planting
+- Soil Health & Fertility
+- Space Optimization
+- Seasonal Planning

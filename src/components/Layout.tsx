@@ -4,10 +4,12 @@ import { useAuth } from '../AuthContext';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { Sprout, Menu, X, User, LogOut, Youtube, Facebook, Instagram, Twitter, MapPin, Phone, CheckCircle, Loader2 } from 'lucide-react';
-import { Chatbot } from './Chatbot';
 import { motion, AnimatePresence } from 'motion/react';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+
+// Lazy load Chatbot as it depends on large AI libraries
+const Chatbot = React.lazy(() => import('./Chatbot').then(m => ({ default: m.Chatbot })));
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, profile } = useAuth();
@@ -261,7 +263,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         </div>
       </footer>
 
-      <Chatbot />
+      <React.Suspense fallback={null}>
+        <Chatbot />
+      </React.Suspense>
     </div>
   );
 };

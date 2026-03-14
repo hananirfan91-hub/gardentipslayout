@@ -11,9 +11,10 @@ export const Home: React.FC = () => {
       <section className="relative h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=75&w=1920&h=1080" 
+            src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=75&w=1280&h=720" 
             alt="Lush and productive vegetable garden layout with diverse organic crops" 
             className="w-full h-full object-cover brightness-50"
+            fetchPriority="high"
           />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-white">
@@ -225,6 +226,7 @@ export const Home: React.FC = () => {
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
+              loading="lazy"
             ></iframe>
           </div>
         </div>

@@ -17,6 +17,10 @@
       "destination": "/manifest.json"
     },
     {
+      "source": "/llms.txt",
+      "destination": "/llms.txt"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

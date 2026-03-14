@@ -135,7 +135,7 @@ export const BlogPost: React.FC = () => {
       {/* Hero Image */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 md:-mt-16 mb-16">
         <div className="aspect-video rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white">
-          <img src={post.image} alt={post.alt} className="w-full h-full object-cover" />
+          <img src={post.image} alt={post.alt} className="w-full h-full object-cover" fetchPriority="high" />
         </div>
       </div>
 

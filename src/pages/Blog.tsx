@@ -66,6 +66,7 @@ export const Blog: React.FC = () => {
                       src={post.image} 
                       alt={post.alt} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
                     />
                   </div>
                   <div className="p-8 md:w-3/5 flex flex-col justify-center">
