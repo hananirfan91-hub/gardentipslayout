@@ -8,9 +8,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 
-// Lazy load Chatbot as it depends on large AI libraries
-const Chatbot = React.lazy(() => import('./Chatbot').then(m => ({ default: m.Chatbot })));
-
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, profile } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -262,10 +259,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <p>© 2026 GardenLayoutTips. All rights reserved.</p>
         </div>
       </footer>
-
-      <React.Suspense fallback={null}>
-        <Chatbot />
-      </React.Suspense>
     </div>
   );
 };

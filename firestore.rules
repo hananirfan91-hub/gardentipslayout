@@ -97,5 +97,13 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow create: if isValidNewsletterSubscriber(request.resource.data);
     }
+
+    match /messages/{messageId} {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.keys().hasAll(['name', 'email', 'message']) &&
+                      request.resource.data.name is string &&
+                      request.resource.data.email is string &&
+                      request.resource.data.message is string;
+    }
   }
 }
